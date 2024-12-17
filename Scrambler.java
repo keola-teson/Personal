@@ -5,102 +5,47 @@
  * Each method builds on another
  * @author Keola Teson :)
  */
+import java.util.Arrays;
+
 public class Scrambler
 {
+
 	public static void main(String[] args)
 	{
-		System.out.println(scrambleWord("abcdefghijklmnopqrstuvwxyz"));
-		System.out.println(scrambleSentence("The quick brown fox jumps over the lazy dog"));
-		System.out.println(scrambleText("This is a test! I want to see if I can scrambled multiple sentences. Carry on. Does this code work?"));
-		
+		System.out.println(scrambleSentence("I am a sentence to scramble."));
+		System.out.println(scrambleText("This is a sentence to scramble. This has an exclamation point! Does this have a question mark?"));
 	}
 	
-	/**
-	 * Method to scramble individual words
-	 * @param word
-	 * @return a scrambled version of the param
-	 */
-	public static String scrambleWord(String word)
+	public static int[] findIndexes(String string, char character)
 	{
-		/*
-		 * variables used in the scramble
-		 */
-		int randomizer = 0;
-		String randomDisplay = "";
-		String display = "";
-		
-		/*
-		 * while loop to loop until the length of the word is 0
-		 */
-		while(word.length() > 0)
+		int count = 0;
+		for (int i = 0; i < string.length(); i++)
 		{
-			//randomly picks a number between the 0 and the length of the word (ex: if the word is "string", length is 6, the randomizer would choose a number from 0 to 6)
-			randomizer = (int)(Math.random() * word.length());
-			
-			/*
-			 * checks if the number randomly generated was already put inside a display
-			 * - adds the number to a display
-			 * - adds the charAt the random index generated to a display that will be returned in the future
-			 * - removes the letter from the original word
-			 */
-			if (randomDisplay.indexOf(randomizer) == -1)
+			if (string.charAt(i) == character)
 			{
-				randomDisplay += randomizer;
-				display += word.charAt(randomizer);
-				word = word.substring(0, randomizer) + word.substring(randomizer + 1);
+				count++;
 			}
 		}
-		//final return statement
-		return display;
-	}
-	
-	/**
-	 * Method to scramble an array
-	 * @param array
-	 * @return a scrambled version of the array
-	 */
-	public static String[] scrambleArray(String[] array)
-	{	
-		/*
-		 * variables used in loop
-		 */
-		int randomizer = 0;
-		String randomDisplay = "";
-		String[] temp = new String[array.length];
-		int i = 0;
 		
-		/*
-		 * loops while the value of i is less than the array length
-		 */
-		while (i < array.length)
+		int[] indexes = new int[count];
+		for (int i = 0; i < string.length(); i++)
 		{
-			//randomly generates a number between 0 and the array length
-			randomizer = (int)(Math.random() * array.length);
-			
-			/*
-			 * checks if the number generated was already generated
-			 * - adds the number to a display
-			 * - adds the value inside the passed array at the generated index to a temp array
-			 */
-			if (randomDisplay.indexOf(" " + randomizer + " ") == -1)
+			if (string.charAt(i) == character)
 			{
-				randomDisplay += " " + randomizer + " ";
-				temp[i] = array[randomizer];
-				
-				//adds one to i
-				i++;
+				for (int j = 0; j < indexes.length; j++)
+				{
+					if (indexes[j] == 0)
+					{
+						indexes[j] = i;
+						break;
+					}
+				}
 			}
 		}
-		//returns the temp array
-		return temp;
+		
+		return indexes;
 	}
 	
-	/**
-	 * Method merges arrays
-	 * @param array1
-	 * @param array2
-	 * @return a merged array of the two passed arrays
-	 */
 	public static int[] mergeArrays(int[] array1, int[] array2)
 	{
 		//creates the mergedArray
@@ -148,107 +93,75 @@ public class Scrambler
 		return mergedArray;
 	}
 	
-	/**
-	 * Method to find the indexes of the passed char
-	 * @param string
-	 * @param character
-	 * @return an array with every index of the passed char
-	 */
-	public static int[] findIndexes(String string, char character)
+	public static void scrambleArray(Object[] array)
 	{
-		/*
-		 * counts the amount of periods in the string for future use
-		 * loops through the string
-		 * - checks if the char the loop is iterated on is '.'
-		 *   - adds one to periodCount
-		 */
-		int count = 0;
-		for (int i = 0; i < string.length(); i++)
+		for (int i = 0; i < array.length; i++)
 		{
-			if (string.charAt(i) == character)
-			{
-				count++;
-			}
+			int randomIndex = (int)(Math.random() * array.length);
+			Object randomItem = array[randomIndex];
+			Object currentItem = array[i];
+			
+			array[i] = randomItem;
+			array[randomIndex] = currentItem;
 		}
-		
-		/*
-		 * adds each index of every period into an array
-		 * loops through the length of the string
-		 * - checks if the charAt i is '.'
-		 *   - loops through the length of the spaceIndexes array
-		 *     - checks if the current item is 0, replaces it with the index of the space it found (i)
-		 *     - breaks the loop
-		 */
-		int[] indexes = new int[count];
-		for (int i = 0; i < string.length(); i++)
-		{
-			if (string.charAt(i) == character)
-			{
-				for (int j = 0; j < indexes.length; j++)
-				{
-					if (indexes[j] == 0)
-					{
-						indexes[j] = i;
-						break;
-					}
-				}
-			}
-		}
-		
-		return indexes;
 	}
 	
-	/**
-	 * Method to scramble a single sentence
-	 * Keeps the spaces where they are supposed to be
-	 * @param string
-	 * @return the final scrambled sentence
-	 */
+	public static String scrambleWord(String string)
+	{
+		String temp = string;
+		string = "";
+		
+		while(temp.length() > 0)
+		{
+			int randomizer = (int)(Math.random() * temp.length());
+			string += temp.charAt(randomizer);
+			temp = temp.substring(0, randomizer) + temp.substring(randomizer + 1);
+		}
+		
+		return string;
+	}
+	
 	public static String scrambleSentence(String string)
 	{
+		String punct = "";
+		if (string.indexOf('.') != -1)
+		{
+			punct = ". ";
+			string = string.substring(0, string.length() - 1);
+		}
+		else if (string.indexOf('!') != -1)
+		{
+			punct = "! ";
+			string = string.substring(0, string.length() - 1);
+		}
+		else if (string.indexOf('?') != -1)
+		{
+			punct = "? ";
+			string = string.substring(0, string.length() - 1);
+		}
+		
 		int[] spaceIndexes = findIndexes(string, ' ');
 		
-		//wordArray to store each word into the array [sets length to the length of the spaceIndexes array + 1]
 		String[] wordArray = new String[spaceIndexes.length + 1];
-		
-		/*
-		 * adds the first word into the array
-		 * loops through length of the spaceIndexes array - 1
-		 * - stores each word into the array ([i + 1] because the loop starts at 0 = (i] + 1 to get rid of space, [i + 1] for next index of space)
-		 * adds the final word to the array ([.length - 1 to get the last item in the array] + 1 to get rid of the space in the front of the word)
-		 */
 		wordArray[0] = string.substring(0, spaceIndexes[0]);
-		
 		for (int i = 0; i < spaceIndexes.length - 1; i++)
 		{
 			wordArray[i + 1] = string.substring(spaceIndexes[i] + 1, spaceIndexes[i + 1]);
 		}
 		wordArray[wordArray.length - 1] = string.substring(spaceIndexes[spaceIndexes.length - 1] + 1);
 		
-		//new String[] that calls the scrambleArray() method and passes into it the wordArray
-		String[] scrambledArray = scrambleArray(wordArray);
+		scrambleArray(wordArray);
 		
-		//changes the value of string to be empty
 		string = "";
-		
-		/*
-		 * for-each item in the array
-		 * - pass it into the scrambleWord() method and add a space right after
-		 */
-		for (String i : scrambledArray)
+		for(String i : wordArray)
 		{
 			string += scrambleWord(i) + " ";
 		}
+		string = string.substring(0, string.lastIndexOf(' '));
 		
-		//returns the modified string (\b to get rid of the final ' ')
-		return string + "\b";
+		return string + punct;
 	}
 	
-	/**
-	 * Method to scrambled multiple senteces in a string
-	 * @param string
-	 * @return the scrambled text in the sentence
-	 */
 	public static String scrambleText(String string)
 	{
 		int[] periodIndexes = findIndexes(string, '.');
@@ -258,84 +171,30 @@ public class Scrambler
 		int[] firstMerge = mergeArrays(periodIndexes, exclamationIndexes);
 		int[] finalIndexes = mergeArrays(firstMerge, questionIndexes);
 		
-		sortArray(finalIndexes);
+		Arrays.sort(finalIndexes);
 		
-		//array to add each individual sentence
 		String[] sentenceArray = new String[finalIndexes.length];
 		
-		/*
-		 * adds the first sentence to the array (0 is a constant)
-		 * loops through the length of the array (.length - 2 because there is a period at the end of the word)
-		 * - adds the next sentences to the array ([i] + 2 to get rid of the space and the period, [i + 1] to go to the next period)
-		 * adds the last sentence to the array ([.length - 2] + 2 to find the second to last period in the string and to get rid of the period and space, 
-		 * [.length - 1] to get the last value;
-		 */
-		sentenceArray[0] = string.substring(0, finalIndexes[0]);
+		sentenceArray[0] = string.substring(0, finalIndexes[0] + 1);
 		
 		if (finalIndexes.length > 1)
 		{
 			for (int i = 0; i < sentenceArray.length - 2; i++)
 			{
-				sentenceArray[i + 1] = string.substring(finalIndexes[i] + 2, finalIndexes[i + 1]);
+				sentenceArray[i + 1] = string.substring(finalIndexes[i] + 2, finalIndexes[i + 1] + 1);
 			}
-			sentenceArray[sentenceArray.length - 1] = string.substring(finalIndexes[finalIndexes.length - 2] + 2, finalIndexes[finalIndexes.length - 1]);
+			sentenceArray[sentenceArray.length - 1] = string.substring(finalIndexes[finalIndexes.length - 2] + 2, finalIndexes[finalIndexes.length - 1] + 1);
 		}
 		
-		//passes the new sentenceArray into the scrambleArray() method and stores that value
-		String[] scrambledArray = scrambleArray(sentenceArray);
+		scrambleArray(sentenceArray);
 		
-		//resets string
-		String display = "";
-		
-		/*
-		 * for-each item in the array
-		 * - check each sentence ender and change the value of punct
-		 * - pass it into the scrambleSentence() method and add punct after
-		 */
-		int j = 0;
-		String punct = "";
-		for (String i : scrambledArray)
+		string = "";
+		for (String i : sentenceArray)
 		{
-			if (string.charAt(finalIndexes[j]) == '.')
-			{
-				punct = ". ";
-			}
-			else if (string.charAt(finalIndexes[j]) == '!')
-			{
-				punct = "! ";
-			}
-			else if (string.charAt(finalIndexes[j]) == '?')
-			{
-				punct = "? ";
-			}
-			
-			display += scrambleSentence(i) + punct;
-			j++;
+			string += scrambleSentence(i);
 		}
+		string = string.substring(0, string.lastIndexOf(' '));
 		
-		//returns the modified string (\b to get rid of the final ' ')
-		return display + "\b";
-	}
-	
-	/**
-	 * Mehthod to sort an array (using insertion sort)
-	 * @param array
-	 */
-	public static void sortArray(int[] array)
-	{
-		for (int i = 0; i < array.length; i++)
-		{
-			int j = i;
-			while (j > 0 && array[j] < array[j - 1])
-			{
-				int thisValue = array[j];
-				int lastValue = array[j - 1];
-				
-				array[j] = lastValue;
-				array[j - 1] = thisValue;
-				
-				j--;
-			}
-		}
+		return string;
 	}
 }
