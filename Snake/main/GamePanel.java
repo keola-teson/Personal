@@ -24,6 +24,8 @@ public class GamePanel extends JPanel implements Runnable
 	private SnakeHead snakeHead = new SnakeHead();
 	private Apple apple = new Apple();
 	
+	private CollisionDetection collisionDetection = new CollisionDetection();
+	
 	public GamePanel()
 	{
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -73,7 +75,7 @@ public class GamePanel extends JPanel implements Runnable
 	
 	public void update()
 	{
-		apple.update();
+		collisionDetection.detectAppleCollision();
 		snakeHead.update(keyHander);
 	}
 	
@@ -84,7 +86,15 @@ public class GamePanel extends JPanel implements Runnable
 		
 		Graphics2D g2 = (Graphics2D)g;
 		
-		apple.draw(g2);
+		try
+		{
+			collisionDetection.draw(g2);
+		}
+		catch (NullPointerException e)
+		{
+			e.printStackTrace();
+			System.exit(0);
+		}
 		snakeHead.draw(g2);
 		
 		g2.dispose();
