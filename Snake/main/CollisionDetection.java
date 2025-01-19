@@ -1,5 +1,8 @@
 package main;
 
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+
 import apple.Apple;
 import snake.SnakeHead;
 
@@ -7,16 +10,8 @@ import snake.SnakeHead;
 
 public class CollisionDetection
 {
-	private SnakeHead snakeHead;
-	private Apple apple;
-	
-	public CollisionDetection()
-	{
-		
-		this.snakeHead = new SnakeHead();
-		this.apple = new Apple();
-		
-	}
+	private SnakeHead snakeHead = new SnakeHead();;
+	private Apple apple = new Apple();;
 
 	public void detectAppleCollision()
 	{
@@ -44,6 +39,19 @@ public class CollisionDetection
 			snakeHead.setHasCollided(true);
 		}
 		
+		if (snakeHead.hasCollided())
+		{
+			apple.setPosX((int)(Math.random() * GamePanel.getScreenWidth() / GamePanel.getTileSize()) * GamePanel.getTileSize());
+			apple.setPosY((int)(Math.random() * GamePanel.getScreenWidth() / GamePanel.getTileSize()) * GamePanel.getTileSize());
+			
+			apple.setCollisionBox(new Rectangle(apple.getPosX(), apple.getPosY(), GamePanel.getTileSize(), GamePanel.getTileSize()));
+		}
+	}
+	
+	
+	public void draw(Graphics2D g2)
+	{
+		apple.draw(g2);
 	}
 	
 }
