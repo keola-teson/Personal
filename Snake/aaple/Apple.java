@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
 import main.GamePanel;
-import snake.SnakeHead;
 
 public class Apple
 {
@@ -29,19 +28,6 @@ public class Apple
 		g2.setColor(Color.RED);
 		g2.fill(collisionBox);
 	}
-	 
-	public void update()
-	{
-		if (SnakeHead.hasCollided())
-		{
-			this.posX = (int)(Math.random() * GamePanel.getScreenWidth() / size) * size;
-			this.posY = (int)(Math.random() * GamePanel.getScreenHeight() / size) * size;
-			
-			collisionBox = new Rectangle(posX, posY, size, size);
-			
-			SnakeHead.setHasCollided(false);
-		}
-	}
 	
 	public int[][] getVertices()
 	{	
@@ -52,6 +38,16 @@ public class Apple
 				{posX + size, posY + size}};
 		
 		return vertices;
+	}
+	
+	public Rectangle getCollisionBox()
+	{
+		return collisionBox;
+	}
+	
+	public void setCollisionBox(Rectangle collisionBox)
+	{
+		this.collisionBox = collisionBox;
 	}
 	
 	public int getPosX()
